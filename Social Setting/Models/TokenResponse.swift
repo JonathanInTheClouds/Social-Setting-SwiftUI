@@ -38,4 +38,10 @@ struct TokenResponse: Codable {
         guard let data = try? keychain.getData("Server-Token") else { return nil }
         return try? JSONDecoder().decode(TokenResponse.self, from: data)
     }
+    
+    static func remove() -> TokenResponse? {
+        let token = TokenResponse.load()
+        try? Keychain().remove("Server-Token")
+        return token
+    }
 }

@@ -15,4 +15,9 @@ class AppManager: ObservableObject {
     static func IsAuthenticated() -> Bool {
         return TokenResponse.load() != nil
     }
+    
+    static func logout() -> TokenResponse? {
+        Authenticated.send(false)
+        return TokenResponse.remove()
+    }
 }

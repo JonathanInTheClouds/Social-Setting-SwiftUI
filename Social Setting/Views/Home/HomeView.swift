@@ -25,8 +25,21 @@ struct HomeView: View {
                 .padding(.top)
                 .padding(.bottom, 30)
             }
+            .background(Color.gray.opacity(0.15))
             .navigationTitle("Home")
             .searchable(text: $searchText)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        withAnimation {
+                            _ = AppManager.logout()
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                    }
+
+                }
+            }
         }
     }
     
