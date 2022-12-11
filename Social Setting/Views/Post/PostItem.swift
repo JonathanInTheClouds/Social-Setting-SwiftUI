@@ -59,10 +59,11 @@ struct PostItem: View {
                     
                     VStack(alignment: .leading) {
                         Text("Bernice Miles")
+                            .foregroundColor(.gray)
                         HStack(spacing: 4) {
                             Text("I just won a million in the lottery! ...")
                         }
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.gray)
                         .font(.subheadline)
                     }
                     
