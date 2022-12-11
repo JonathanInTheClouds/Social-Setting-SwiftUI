@@ -12,12 +12,26 @@ struct MainTabView: View {
         TabView {
             HomeView()
                 .tabItem {
-                    Label("Home", systemImage: "doc.text.image.fill")
+                    Label("Home", systemImage: "doc.text.image")
+                        .environment(\.symbolVariants, .none)
                 }
             
             HomeView()
                 .tabItem {
-                    Label("Home", systemImage: "gearshape.fill")
+                    Label("Inbox", systemImage: "envelope")
+                        .environment(\.symbolVariants, .fill)
+                }
+            
+            HomeView()
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                        .environment(\.symbolVariants, .none)
+                }
+            
+            HomeView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                        .environment(\.symbolVariants, .none)
                 }
         }
     }
