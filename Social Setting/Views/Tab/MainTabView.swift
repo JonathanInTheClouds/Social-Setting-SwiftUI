@@ -16,19 +16,19 @@ struct MainTabView: View {
                         .environment(\.symbolVariants, .none)
                 }
             
-            HomeView()
+            InboxView()
                 .tabItem {
                     Label("Inbox", systemImage: "envelope")
                         .environment(\.symbolVariants, .fill)
                 }
             
-            HomeView()
+            SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                         .environment(\.symbolVariants, .none)
                 }
             
-            HomeView()
+            SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                         .environment(\.symbolVariants, .none)
