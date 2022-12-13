@@ -40,15 +40,16 @@ actor AuthManager {
         
         let task = Task { () throws -> TokenResponse in
             defer { refreshTask = nil }
-            guard let url = URL(string: "https://localhost:7136/token/refresh") else { throw AuthError.BadURL }
+            guard let url = URL(string: "http://localhost:5293/token/refresh") else { throw AuthError.BadURL }
             var urlRequest = URLRequest(url: url)
             guard let currentToken = currentToken else { throw AuthError.MissingToken }
             let encodedData = try? encoder.encode(RefreshTokenRequest(refreshToken: currentToken.refreshToken))
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = encodedData
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
             guard let resp = response as? HTTPURLResponse, resp.statusCode == 200 else { throw AuthError.BadResponse }
-            guard let newToken = try? decoder.decode(TokenResponse.self, from: data) else { throw AuthError.MissingToken }
+            guard let newToken = try? JSONDecoder.social_setting_decoder.decode(TokenResponse.self, from: data) else { throw AuthError.MissingToken }
             guard newToken.save() == true else { throw AuthError.UnsavedToken }
             return newToken
         }

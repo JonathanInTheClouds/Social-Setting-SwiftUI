@@ -13,7 +13,7 @@ struct Request {
     let method: Method
     
     var urlRequest: URLRequest? {
-        guard let url = URL(string: "http://localhost:5293/user/signin") else { return nil }
+        guard let url = url else { return nil }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
         urlRequest.httpBody = data

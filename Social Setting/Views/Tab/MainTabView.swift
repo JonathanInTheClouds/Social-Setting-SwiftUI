@@ -28,7 +28,7 @@ struct MainTabView: View {
                         .environment(\.symbolVariants, .none)
                 }
             
-            SettingsView()
+            AppSettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                         .environment(\.symbolVariants, .none)
