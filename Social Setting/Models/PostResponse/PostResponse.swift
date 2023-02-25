@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct PostResponse: Codable {
+struct PostResponse: Codable, Hashable {
     let id: String
     let title: String
     let body: String
     let voteCount: Int
     let commentCount: Int
+    let user: UserResponse
 }

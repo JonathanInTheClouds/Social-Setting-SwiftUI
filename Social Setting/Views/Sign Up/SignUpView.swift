@@ -169,13 +169,8 @@ extension SignUpView {
             sendingData = true
             Task {
                 do {
-                    
-                    let signUpObject = CreateUserRequest(email: email, username: username, password: password)
-                    guard let encodedData = try? JSONEncoder().encode(signUpObject) else { return }
-                    guard let url = URL(string: "http://localhost:5293/user/signup") else { return }
-                    var urlRequest = URLRequest(url: url)
-                    urlRequest.httpMethod = "POST"
-                    urlRequest.httpBody = encodedData
+                    let data = CreateUserRequest(email: email, username: username, password: password)
+                    guard let urlRequest = EndPoint.SignUp(data: data).request else { return }
                     
                     let token: TokenResponse = try await network.loadUnauthorized(
                         urlRequest,

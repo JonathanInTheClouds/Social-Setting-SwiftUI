@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  SubSettingList.swift
 //  Social Setting
 //
 //  Created by Mettaworldj on 11/26/22.
@@ -13,68 +13,31 @@ class SearchBarViewModel: ObservableObject {
     @Published var text: String = ""
 }
 
-struct HomeView: View {
+struct SubSettingList: View {
     
-//    var body: some View {
-//        NavigationStack {
-//            ScrollView {
-//                LazyVStack(spacing: 30) {
-//                    ForEach(1...10, id: \.self) { i in
-//                        PostItem()
-//                            .padding(.horizontal, 21)
-//                        Divider()
-//                            .padding(.bottom)
-//                    }
-//                }
-//                .padding(.top)
-//                .padding(.bottom, 30)
-//            }
-//            .background(Color.gray.opacity(0.15))
-//            .navigationTitle("Home")
-//            .searchable(text: $searchText)
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    Button {
-//                        withAnimation {
-//                            _ = AppManager.logout()
-//                        }
-//                    } label: {
-//                        Image(systemName: "person.fill.xmark")
-//                    }
-//                }
-//
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    Button {
-//                        getAllUsers()
-//                    } label: {
-//                        Image(systemName: "ellipsis")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    @State private var searchText = ""
     
-    @State var searchText = ""
-    
-    @Environment(\.managedObjectContext) var moc
+    @Environment(\.managedObjectContext) private var moc
     
     @FetchRequest(
         sortDescriptors: [],
         predicate: NSPredicate(format: "favorite = %d", true)
     )
-    var favoriteSubSettings: FetchedResults<SubSettingEntity>
+    private var favoriteSubSettings: FetchedResults<SubSettingEntity>
     
     @FetchRequest(
         sortDescriptors: [],
         predicate: NSPredicate(format: "favorite = %d", false)
     )
-    var subSettings: FetchedResults<SubSettingEntity>
+    private var subSettings: FetchedResults<SubSettingEntity>
     
-    @State var subSettingSearchResults = [SubSettingResponse]()
+    @State private var subSettingSearchResults = [SubSettingResponse]()
     
-    @StateObject var searchBarViewModel = SearchBarViewModel()
+    @StateObject private var searchBarViewModel = SearchBarViewModel()
     
-    var filteredFavoriteSubSettings: [SubSettingEntity] {
+    @State private var shouldPresent = false
+    
+    private var filteredFavoriteSubSettings: [SubSettingEntity] {
         if searchBarViewModel.text.isEmpty {
             return []
         }
@@ -108,7 +71,7 @@ struct HomeView: View {
                     Section("Favorites") {
                         ForEach(favoriteSubSettings, id: \.id) { subSetting in
                             NavigationLink {
-
+                                SubSettingHomeView(subSetting: .init(id: subSetting.id ?? "", name: subSetting.title ?? ""))
                             } label: {
                                 SubSettingItem(subSettingEntity: subSetting)
                             }
@@ -138,15 +101,6 @@ struct HomeView: View {
 
             }
             .searchable(text: $searchBarViewModel.text.animation())
-            .autocorrectionDisabled()
-            .navigationTitle("Sub Settings")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {} label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
             .onReceive(
                 searchBarViewModel.$text
                     .debounce(for: .seconds(0.8), scheduler: DispatchQueue.main)
@@ -155,10 +109,21 @@ struct HomeView: View {
                 print(">> searching for: \($0)")
                 searchSubSetting(text: $0)
             }
+            .autocorrectionDisabled()
+            .navigationTitle("Sub Settings")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        self.shouldPresent = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
     }
     
-    func searchSubSetting(text: String) {
+    private func searchSubSetting(text: String) {
         let network = NetworkManager.shared
         let ids = Set(self.favoriteSubSettings.compactMap { $0.id })
         Task {
@@ -180,7 +145,7 @@ struct HomeView: View {
         }
     }
     
-    func getAllUsers() {
+    private func getAllUsers() {
         let network = NetworkManager.shared
         Task {
             guard let url = URL(string: "http://localhost:5293/user") else { return }
@@ -198,6 +163,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        SubSettingList()
     }
 }

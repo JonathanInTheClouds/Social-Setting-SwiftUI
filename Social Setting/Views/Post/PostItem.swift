@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PostItem: View {
     
+    var post: PostResponse
+    
     var header: some View {
         HStack {
             Circle()
@@ -16,7 +18,7 @@ struct PostItem: View {
                 .frame(width: 45)
             
             VStack(alignment: .leading) {
-                Text("Bernice Miles")
+                Text(post.user.username)
                 HStack(spacing: 4) {
                     Text("@adrewww_")
                     Text("•")
@@ -34,13 +36,13 @@ struct PostItem: View {
                 Image(systemName: "ellipsis")
             }
             .foregroundColor(.secondary)
-
         }
+        .padding(.bottom, 10)
     }
     
     var text: some View {
         HStack {
-            Text("Come on @craig_love what are you talking about? Isn't it a joke?")
+            Text(post.body)
             Spacer()
         }
     }
@@ -122,7 +124,7 @@ struct PostItem: View {
             
             text
             
-            media
+//            media
             
             actionButtons
                 .padding(.vertical)
@@ -132,7 +134,7 @@ struct PostItem: View {
 
 struct PostItem_Previews: PreviewProvider {
     static var previews: some View {
-        PostItem()
+        PostItem(post: .init(id: "1487f41b-a136-4a39-b5b3-87cc7866efeb", title: "Why is Java so Good", body: "And when did it start becoming widely used?", voteCount: 0, commentCount: 0, user: .init(email: "jon@mail.com", username: "DarkKnight", creationDate: .now)))
             .padding(.horizontal, 21)
     }
 }

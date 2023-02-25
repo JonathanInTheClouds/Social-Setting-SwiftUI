@@ -152,10 +152,8 @@ extension SignInView {
         func sendRequest() {
             self.sendingData = true
             Task {
-                let signUpObject = LogInUserRequest(username: username, password: password)
-                let data = try? JSONEncoder().encode(signUpObject)
-                let request = Request(url: URL(string: "http://localhost:5293/user/signin"), data: data, method: .POST)
-                guard let urlRequest = request.urlRequest else { return }
+                let data = LogInUserRequest(username: username, password: password)
+                guard let urlRequest = EndPoint.SignIn(data: data).request else { return }
                 
                 do {
                     let token: TokenResponse = try await network.loadUnauthorized(

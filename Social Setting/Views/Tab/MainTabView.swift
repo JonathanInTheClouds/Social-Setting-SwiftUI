@@ -10,7 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            HomeView()
+            SubSettingList()
                 .tabItem {
                     Label("Home", systemImage: "doc.text.image")
                         .environment(\.symbolVariants, .none)
